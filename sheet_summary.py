@@ -216,7 +216,8 @@ def build_player_summaries(team_filter, region='euw1', seasons=['current', '24',
                             champ_row.get('Wins', ''),
                             champ_row.get('Losses', '')
                         ])
-                    out_ws.append_rows(player_rows, value_input_option="USER_ENTERED")
+                    # Use value_input_option="RAW" to ensure numbers are stored as numbers
+                    out_ws.append_rows(player_rows, value_input_option="RAW")
                 else:
                     print(f"Aggregation for player '{player_name}' returned no data.")
             except Exception as e:
@@ -229,5 +230,5 @@ def build_player_summaries(team_filter, region='euw1', seasons=['current', '24',
     print("All specified team player data processed and written to the output sheet.")
 
 if __name__ == "__main__":
-    team_to_process = "Zephyr Theseus"
+    team_to_process = "Dorans Independent Gamers"
     build_player_summaries(team_to_process)
