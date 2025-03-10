@@ -122,7 +122,7 @@ def get_or_create_output_worksheet(sheet, output_sheet_title, header, default_ro
 # -----------------------------
 # Main Aggregation Function
 # -----------------------------
-def build_player_summaries(team_filter, region='euw1', seasons=['current', '24', '23', '22', '21', '20']):
+def build_player_summaries(team_filter, region='euw1', seasons=['current', '24', '23', '22', '21', '20', '19', '18', '17', '16']):
     """
     Processes players from the input Google Sheet, filtering by a specific team.
     
@@ -195,8 +195,6 @@ def build_player_summaries(team_filter, region='euw1', seasons=['current', '24',
                             all_account_data.append(df_stats)
                     except Exception as e:
                         print(f"Error fetching data for player '{player_name}', account '{account}': {e}")
-            print("Waiting 10 seconds before processing the next account...")
-            time.sleep(10)
         
         if all_account_data:
             try:
@@ -226,16 +224,10 @@ def build_player_summaries(team_filter, region='euw1', seasons=['current', '24',
         else:
             print(f"No data collected for player '{player_name}'.")
         
-        time.sleep(5)
+        time.sleep(3)
     
     print("All specified team player data processed and written to the output sheet.")
 
 if __name__ == "__main__":
-    time.sleep(300)
-    # Example usage: process players only for team "Dorans Independent Gamers"
-    team_to_process = "Dorans Independent Gamers"
-    build_player_summaries(team_to_process)
     team_to_process = "Zephyr Theseus"
-    build_player_summaries(team_to_process)
-    team_to_process = "Dorans Maggi"
     build_player_summaries(team_to_process)

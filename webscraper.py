@@ -15,7 +15,7 @@ def get_champion_stats(region, summoner_name, season='current'):
         season (str): 'current' for current season, or season number (e.g., '24', '23')
     """
     # Now, all summoner names are treated the same.
-    formatted_name = summoner_name.lower().replace('#', '-').replace(' ', '-')
+    formatted_name = summoner_name.lower().replace('#', '-').replace(' ', '%20')
     base_url = f'https://u.gg/lol/profile/{region}/{formatted_name}/champion-stats'
     if season != 'current':
         url = f'{base_url}?season={season}'
@@ -165,43 +165,3 @@ def aggregate_champion_stats(all_data):
     aggregated['Win Rate'] = aggregated['Win Rate'].astype(str) + '%'
     
     return aggregated[['Champion', 'Total Games', 'Win Rate', 'KDA', 'CS', 'Damage', 'Gold', 'Wins', 'Losses']]
-
-def main():
-    # List of accounts to scrape
-    accounts = [
-        {'region': 'euw1', 'name': 'oriented-euw'},
-        {'region': 'euw1', 'name': 'lotus-owlee'},
-        {'region': 'euw1', 'name': 'ig lotus#limit'},
-    ]
-    
-    # Seasons to scrape (18 to current)
-    seasons = ['current', '24', '23', '22', '21', '20', '19', '18']
-    
-    for account in accounts:
-        print(f"\nScraping data for {account['name']}...")
-        all_season_data = []
-        for season in seasons:
-            season_display = "Current Season" if season == 'current' else f"Season {season}"
-            print(f"\n{season_display}")
-            df = get_champion_stats(account['region'], account['name'], season)
-            if df is not None and not df.empty:
-                all_season_data.append(df)
-                print(f"Found {len(df)} champions")
-            else:
-                print("No data found")
-            time.sleep(2)
-        
-        if all_season_data:
-            print("\n=== Aggregate Champion Statistics (Season 18 - Current) ===")
-            aggregate_df = aggregate_champion_stats(all_season_data)
-            if aggregate_df is not None:
-                print("\nTop Champions by Games Played:")
-                pd.set_option('display.max_rows', None)
-                print(aggregate_df)
-            else:
-                print("Could not generate aggregate statistics")
-        else:
-            print("\nNo data found for any season")
-
-if __name__ == "__main__":
-    main()
